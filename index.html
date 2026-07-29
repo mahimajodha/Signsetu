@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SignSetu — Home</title>
+<style>
+  :root{
+    --cream:#FBF5EA;
+    --ink:#17171A;
+    --amber:#F5A623;
+    --amber-deep:#E0921A;
+    --panel:#FFFFFF;
+    --line:rgba(23,23,26,0.08);
+    --red:#D64545;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Segoe UI', system-ui, -apple-system, sans-serif;
+    background:var(--cream);
+    color:var(--ink);
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:32px 16px;
+  }
+  .app{ width:100%; max-width:420px; }
+  .eyebrow{
+    display:flex; align-items:center; gap:8px;
+    font-size:11px; font-weight:700; letter-spacing:0.14em;
+    text-transform:uppercase; color:var(--amber-deep); margin-bottom:6px;
+  }
+  .eyebrow .dot{width:9px;height:9px;border-radius:3px;background:var(--ink);display:inline-block;}
+  .eyebrow .dot.amber{background:var(--amber);}
+  h1{ font-size:26px; margin:0 0 4px 0; letter-spacing:-0.01em; }
+  .tagline{ font-style:italic; color:#6b6b6f; margin:0 0 20px 0; font-size:14px; }
+
+  .phone{
+    background:var(--panel); border-radius:28px; padding:20px;
+    box-shadow:0 20px 60px rgba(23,23,26,0.12), 0 2px 8px rgba(23,23,26,0.06);
+    border:1px solid var(--line);
+  }
+  .topbar{ display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; }
+  .brand{ display:flex; align-items:center; gap:8px; font-weight:800; font-size:16px; }
+  .brand .sq{ width:16px;height:16px;border-radius:4px;background:var(--amber); }
+  .gear{ width:32px; height:32px; border-radius:50%; background:#F2EDE1; display:flex; align-items:center; justify-content:center; font-size:14px; }
+
+  h2.greet{ font-size:20px; margin:0 0 2px 0; }
+  .greet-sub{ font-size:12.5px; color:#8a8a8e; margin:0 0 16px 0; }
+
+  .grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+  }
+  .card{
+    border-radius:16px;
+    padding:16px;
+    cursor:pointer;
+    border:none;
+    text-align:left;
+    font-family:inherit;
+    transition:transform 0.12s ease;
+    display:flex; flex-direction:column; gap:22px;
+  }
+  .card:active{ transform:scale(0.97); }
+  .card-icon{ font-size:20px; }
+  .card-title{ font-size:14px; font-weight:800; line-height:1.25; }
+
+  .card.dark{ background:var(--ink); color:#fff; }
+  .card.amber{ background:var(--amber); color:var(--ink); }
+  .card.light{ background:#FAF7F0; color:var(--ink); border:1px solid var(--line); }
+
+  .sos{
+    margin-top:10px;
+    background:var(--ink);
+    border-radius:16px;
+    padding:14px 16px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    cursor:pointer;
+    border:none;
+    width:100%;
+    text-align:left;
+  }
+  .sos-icon{
+    width:34px; height:34px; border-radius:50%; background:var(--red);
+    display:flex; align-items:center; justify-content:center; font-size:15px; flex-shrink:0;
+  }
+  .sos-title{ color:#fff; font-weight:800; font-size:13.5px; }
+  .sos-sub{ color:#b9b9bd; font-size:11.5px; }
+
+  .navbar{
+    display:flex; justify-content:space-around; margin-top:18px; padding-top:14px;
+    border-top:1px solid var(--line);
+  }
+  .navitem{ display:flex; flex-direction:column; align-items:center; gap:3px; font-size:10.5px; color:#9a9a9e; font-weight:600; cursor:pointer; }
+  .navitem.active{ color:var(--amber-deep); }
+  .navitem .ni-icon{ font-size:17px; }
+
+  .footer-tags{ display:flex; gap:14px; justify-content:center; margin-top:18px; font-size:11px; color:#9a9a9e; font-weight:600; flex-wrap:wrap; }
+  .footer-tags span{ display:flex; align-items:center; gap:5px; }
+  .footer-tags .fdot{ width:6px; height:6px; border-radius:50%; background:var(--amber); }
+
+  .toast{
+    position:fixed; bottom:24px; left:50%; transform:translateX(-50%);
+    background:var(--ink); color:#fff; padding:10px 18px; border-radius:30px;
+    font-size:12.5px; font-weight:600; opacity:0; pointer-events:none;
+    transition:opacity 0.25s;
+  }
+  .toast.show{ opacity:1; }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="eyebrow"><span class="dot"></span><span class="dot amber"></span>TEAM CATALYST · LIVE PROTOTYPE</div>
+  <h1>SignSetu — Home</h1>
+  <p class="tagline">"Every gesture has a voice"</p>
+
+  <div class="phone">
+    <div class="topbar">
+      <div class="brand"><span class="sq"></span>signsetu</div>
+      <div class="gear">⚙️</div>
+    </div>
+
+    <h2 class="greet">Namaste, Aarav 👋</h2>
+    <p class="greet-sub">Choose how you'd like to communicate</p>
+
+    <div class="grid">
+      <button class="card dark" onclick="location.href='sign-to-speech/index.html'">
+        <span class="card-icon">📷</span>
+        <span class="card-title">Sign to<br/>Speech</span>
+      </button>
+      <button class="card amber" onclick="location.href='speech-to-sign/index.html'">
+        <span class="card-icon">🎙️</span>
+        <span class="card-title">Speech to<br/>Sign</span>
+      </button>
+      <button class="card light" onclick="showToast('Learn Sign Language — coming soon')">
+        <span class="card-icon">🎓</span>
+        <span class="card-title">Learn Sign<br/>Language</span>
+      </button>
+      <button class="card light" id="offlineCard" onclick="toggleOffline()">
+        <span class="card-icon">📶</span>
+        <span class="card-title">Offline Mode:<br/><span id="offlineState">On</span></span>
+      </button>
+    </div>
+
+    <button class="sos" onclick="showToast('Emergency contacts would be alerted here')">
+      <div class="sos-icon">🆘</div>
+      <div>
+        <div class="sos-title">Emergency SOS</div>
+        <div class="sos-sub">Tap to alert your contacts + location</div>
+      </div>
+    </button>
+
+    <div class="navbar">
+      <div class="navitem active"><span class="ni-icon">🏠</span>Home</div>
+      <div class="navitem" onclick="location.href='sign-to-speech/index.html'"><span class="ni-icon">📷</span>Sign</div>
+      <div class="navitem" onclick="location.href='speech-to-sign/index.html'"><span class="ni-icon">🎙️</span>Speak</div>
+      <div class="navitem"><span class="ni-icon">👤</span>Profile</div>
+    </div>
+  </div>
+
+  <div class="footer-tags">
+    <span><span class="fdot"></span>Google MediaPipe</span>
+    <span><span class="fdot"></span>PyTorch / TFLite</span>
+    <span><span class="fdot"></span>Offline-First</span>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(window._toastTimer);
+  window._toastTimer = setTimeout(()=> t.classList.remove('show'), 2200);
+}
+function toggleOffline(){
+  const el = document.getElementById('offlineState');
+  el.textContent = el.textContent === 'On' ? 'Off' : 'On';
+}
+</script>
+</body>
+</html>
