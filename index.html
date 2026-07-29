@@ -112,6 +112,25 @@
     transition:opacity 0.25s;
   }
   .toast.show{ opacity:1; }
+
+  /* ---- Responsive desktop layout ---- */
+  @media (min-width: 860px){
+    .app{ max-width: 900px; }
+    .phone{
+      display:grid;
+      grid-template-columns: 300px 1fr;
+      gap:32px;
+      padding:32px;
+      border-radius:24px;
+      align-items:start;
+    }
+    .topbar{ grid-column: 1 / -1; }
+    .greet{ font-size:26px; }
+    .greet-sub{ font-size:14px; }
+    .grid{ grid-template-columns:1fr 1fr; }
+    .card{ padding:20px; }
+    .navbar{ grid-column: 1 / -1; }
+  }
 </style>
 </head>
 <body>
@@ -126,35 +145,39 @@
       <div class="gear">⚙️</div>
     </div>
 
-    <h2 class="greet">Namaste, Aarav 👋</h2>
-    <p class="greet-sub">Choose how you'd like to communicate</p>
-
-    <div class="grid">
-      <button class="card dark" onclick="location.href='sign-to-speech/index.html'">
-        <span class="card-icon">📷</span>
-        <span class="card-title">Sign to<br/>Speech</span>
-      </button>
-      <button class="card amber" onclick="location.href='speech-to-sign/index.html'">
-        <span class="card-icon">🎙️</span>
-        <span class="card-title">Speech to<br/>Sign</span>
-      </button>
-      <button class="card light" onclick="showToast('Learn Sign Language — coming soon')">
-        <span class="card-icon">🎓</span>
-        <span class="card-title">Learn Sign<br/>Language</span>
-      </button>
-      <button class="card light" id="offlineCard" onclick="toggleOffline()">
-        <span class="card-icon">📶</span>
-        <span class="card-title">Offline Mode:<br/><span id="offlineState">On</span></span>
-      </button>
+    <div class="greet-block">
+      <h2 class="greet">Namaste, Aarav 👋</h2>
+      <p class="greet-sub">Choose how you'd like to communicate</p>
     </div>
 
-    <button class="sos" onclick="showToast('Emergency contacts would be alerted here')">
-      <div class="sos-icon">🆘</div>
-      <div>
-        <div class="sos-title">Emergency SOS</div>
-        <div class="sos-sub">Tap to alert your contacts + location</div>
+    <div class="right-block">
+      <div class="grid">
+        <button class="card dark" onclick="location.href='sign-to-speech/index.html'">
+          <span class="card-icon">📷</span>
+          <span class="card-title">Sign to<br/>Speech</span>
+        </button>
+        <button class="card amber" onclick="location.href='speech-to-sign/index.html'">
+          <span class="card-icon">🎙️</span>
+          <span class="card-title">Speech to<br/>Sign</span>
+        </button>
+        <button class="card light" onclick="showToast('Learn Sign Language — coming soon')">
+          <span class="card-icon">🎓</span>
+          <span class="card-title">Learn Sign<br/>Language</span>
+        </button>
+        <button class="card light" id="offlineCard" onclick="toggleOffline()">
+          <span class="card-icon">📶</span>
+          <span class="card-title">Offline Mode:<br/><span id="offlineState">On</span></span>
+        </button>
       </div>
-    </button>
+
+      <button class="sos" onclick="showToast('Emergency contacts would be alerted here')">
+        <div class="sos-icon">🆘</div>
+        <div>
+          <div class="sos-title">Emergency SOS</div>
+          <div class="sos-sub">Tap to alert your contacts + location</div>
+        </div>
+      </button>
+    </div>
 
     <div class="navbar">
       <div class="navitem active"><span class="ni-icon">🏠</span>Home</div>

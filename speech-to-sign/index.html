@@ -25,7 +25,12 @@
     justify-content:center;
     padding:32px 16px;
   }
-  .app{ width:100%; max-width:420px; }
+  .app{ width:100%; max-width:420px; margin:0 auto; }
+  .backlink{
+    display:inline-flex; align-items:center; gap:6px;
+    font-size:13px; font-weight:700; color:var(--ink); text-decoration:none;
+    margin-bottom:14px; cursor:pointer; background:none; border:none; padding:0;
+  }
   .eyebrow{
     display:flex; align-items:center; gap:8px;
     font-size:11px; font-weight:700; letter-spacing:0.14em;
@@ -132,27 +137,59 @@
   .footer-tags{ display:flex; gap:14px; justify-content:center; margin-top:18px; font-size:11px; color:#9a9a9e; font-weight:600; flex-wrap:wrap; }
   .footer-tags span{ display:flex; align-items:center; gap:5px; }
   .footer-tags .fdot{ width:6px; height:6px; border-radius:50%; background:var(--amber); }
+
+  /* ---- Responsive desktop layout ---- */
+  @media (min-width: 860px){
+    .app{ max-width: 900px; }
+    .phone{
+      display:grid;
+      grid-template-columns: 340px 1fr;
+      gap:32px;
+      padding:32px;
+      border-radius:24px;
+      align-items:start;
+    }
+    .topbar{ grid-column: 1 / -1; }
+    .intro-col{ display:flex; flex-direction:column; gap:14px; }
+    .avatar-col{ display:flex; flex-direction:column; }
+    .screen-title{ font-size:24px; }
+    .screen-sub{ font-size:14px; }
+    .avatar-wrap{ max-width:420px; }
+  }
 </style>
 </head>
 <body>
 <div class="app">
+  <button class="backlink" onclick="location.href='../index.html'">← Back to Home</button>
   <div class="eyebrow"><span class="dot"></span><span class="dot amber"></span>TEAM CATALYST · LIVE PROTOTYPE</div>
   <h1>SignSetu — Speech to Sign</h1>
   <p class="tagline">"Every gesture has a voice"</p>
 
   <div class="phone">
     <div class="topbar"><div class="brand"><span class="sq"></span>signsetu</div></div>
-    <h2 class="screen-title">Voice to Sign Avatar</h2>
-    <p class="screen-sub">Speak naturally, the avatar signs it back</p>
 
-    <div class="listen-box">
-      <button class="mic-circle" id="micBtn" title="Tap to speak">🎙️</button>
-      <div class="listen-label" id="listenLabel">Tap to speak</div>
+    <div class="intro-col">
+      <div>
+        <h2 class="screen-title">Voice to Sign Avatar</h2>
+        <p class="screen-sub">Speak naturally, the avatar signs it back</p>
+      </div>
+
+      <div class="listen-box">
+        <button class="mic-circle" id="micBtn" title="Tap to speak">🎙️</button>
+        <div class="listen-label" id="listenLabel">Tap to speak</div>
+      </div>
+
+      <div class="result-box">
+        <div class="result-label">Signing Now</div>
+        <div class="result-text" id="heardText">"—"</div>
+      </div>
+      <div class="status-line" id="statusLine">Click the mic and say something like "hello" or "I need help"</div>
     </div>
 
-    <div class="avatar-wrap">
-      <div class="badge">SVG AVATAR · DEMO</div>
-      <div class="sign-label-badge" id="signBadge">—</div>
+    <div class="avatar-col">
+      <div class="avatar-wrap">
+        <div class="badge">SVG AVATAR · DEMO</div>
+        <div class="sign-label-badge" id="signBadge">—</div>
       <svg id="avatar" viewBox="0 0 200 210" xmlns="http://www.w3.org/2000/svg" class="pose-neutral">
         <!-- legs -->
         <rect x="82" y="150" width="14" height="50" rx="7" fill="#2B2B30"/>
@@ -190,13 +227,8 @@
         <path class="heart-icon" d="M100 82 C90 68, 65 75, 70 95 C74 112, 100 128, 100 128 C100 128, 126 112, 130 95 C135 75, 110 68, 100 82 Z"
               fill="#E0392B" opacity="0"/>
       </svg>
+      </div>
     </div>
-
-    <div class="result-box">
-      <div class="result-label">Signing Now</div>
-      <div class="result-text" id="heardText">"—"</div>
-    </div>
-    <div class="status-line" id="statusLine">Click the mic and say something like "hello" or "I need help"</div>
   </div>
 
   <div class="footer-tags">

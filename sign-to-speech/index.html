@@ -23,225 +23,151 @@
     background:var(--cream);
     color:var(--ink);
     min-height:100vh;
-    display:flex;
-    align-items:center;
-    justify-content:center;
     padding:32px 16px;
   }
-  .app{
-    width:100%;
-    max-width:420px;
+  .app{ width:100%; max-width:420px; margin:0 auto; }
+  .backlink{
+    display:inline-flex; align-items:center; gap:6px;
+    font-size:13px; font-weight:700; color:var(--ink); text-decoration:none;
+    margin-bottom:14px; cursor:pointer; background:none; border:none; padding:0;
   }
   .eyebrow{
-    display:flex;
-    align-items:center;
-    gap:8px;
-    font-size:11px;
-    font-weight:700;
-    letter-spacing:0.14em;
-    text-transform:uppercase;
-    color:var(--amber-deep);
-    margin-bottom:6px;
+    display:flex; align-items:center; gap:8px;
+    font-size:11px; font-weight:700; letter-spacing:0.14em;
+    text-transform:uppercase; color:var(--amber-deep); margin-bottom:6px;
   }
   .eyebrow .dot{width:9px;height:9px;border-radius:3px;background:var(--ink);display:inline-block;}
   .eyebrow .dot.amber{background:var(--amber);}
-  h1{
-    font-size:26px;
-    margin:0 0 4px 0;
-    letter-spacing:-0.01em;
-  }
-  .tagline{
-    font-style:italic;
-    color:#6b6b6f;
-    margin:0 0 20px 0;
-    font-size:14px;
-  }
+  h1{ font-size:26px; margin:0 0 4px 0; letter-spacing:-0.01em; }
+  .tagline{ font-style:italic; color:#6b6b6f; margin:0 0 20px 0; font-size:14px; }
+
   .phone{
-    background:var(--panel);
-    border-radius:28px;
-    padding:20px;
+    background:var(--panel); border-radius:28px; padding:20px;
     box-shadow:0 20px 60px rgba(23,23,26,0.12), 0 2px 8px rgba(23,23,26,0.06);
     border:1px solid var(--line);
   }
-  .topbar{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    margin-bottom:14px;
-  }
-  .brand{
-    display:flex;
-    align-items:center;
-    gap:8px;
-    font-weight:800;
-    font-size:16px;
-  }
-  .brand .sq{
-    width:16px;height:16px;border-radius:4px;background:var(--amber);
-  }
-  h2.screen-title{
-    font-size:19px;
-    margin:0 0 2px 0;
-  }
-  .screen-sub{
-    font-size:12.5px;
-    color:#8a8a8e;
-    margin:0 0 12px 0;
-  }
+  .topbar{ display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
+  .brand{ display:flex; align-items:center; gap:8px; font-weight:800; font-size:16px; }
+  .brand .sq{ width:16px;height:16px;border-radius:4px;background:var(--amber); }
+  h2.screen-title{ font-size:19px; margin:0 0 2px 0; }
+  .screen-sub{ font-size:12.5px; color:#8a8a8e; margin:0 0 12px 0; }
+
   .cam-wrap{
-    position:relative;
-    background:var(--ink);
-    border-radius:16px;
-    overflow:hidden;
-    aspect-ratio:1/1;
+    position:relative; background:var(--ink); border-radius:16px; overflow:hidden; aspect-ratio:1/1;
   }
-  video{
-    position:absolute; inset:0;
-    width:100%; height:100%;
-    object-fit:cover;
-    transform:scaleX(-1);
-  }
-  canvas{
-    position:absolute; inset:0;
-    width:100%; height:100%;
-    transform:scaleX(-1);
-  }
+  video{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transform:scaleX(-1); }
+  canvas{ position:absolute; inset:0; width:100%; height:100%; transform:scaleX(-1); }
   .badge{
-    position:absolute;
-    top:10px; left:10px;
-    z-index:5;
-    background:rgba(23,23,26,0.75);
-    color:#fff;
-    font-size:10.5px;
-    font-weight:700;
-    letter-spacing:0.06em;
-    padding:5px 9px;
-    border-radius:20px;
-    display:flex;
-    align-items:center;
-    gap:5px;
+    position:absolute; top:10px; left:10px; z-index:5;
+    background:rgba(23,23,26,0.75); color:#fff; font-size:10.5px; font-weight:700;
+    letter-spacing:0.06em; padding:5px 9px; border-radius:20px;
+    display:flex; align-items:center; gap:5px;
   }
-  .badge .ping{
-    width:6px;height:6px;border-radius:50%;background:var(--amber);
-    animation:pulse 1.4s infinite;
-  }
+  .badge .ping{ width:6px;height:6px;border-radius:50%;background:var(--amber); animation:pulse 1.4s infinite; }
   @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
+
+  .cam-off-overlay{
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    color:#8a8a8e; font-size:13px; font-weight:600; text-align:center; padding:20px;
+  }
+
   .result-box{
-    margin-top:12px;
-    background:#fff;
-    border:1px solid var(--line);
-    border-radius:14px;
-    padding:14px 16px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:10px;
+    margin-top:12px; background:#fff; border:1px solid var(--line); border-radius:14px;
+    padding:14px 16px; display:flex; align-items:center; justify-content:space-between; gap:10px;
   }
-  .result-label{
-    font-size:10.5px;
-    font-weight:700;
-    letter-spacing:0.1em;
-    text-transform:uppercase;
-    color:#9a9a9e;
-    margin-bottom:3px;
-  }
-  .result-word{
-    font-size:24px;
-    font-weight:800;
-  }
+  .result-label{ font-size:10.5px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:#9a9a9e; margin-bottom:3px; }
+  .result-word{ font-size:24px; font-weight:800; }
   .speak-btn{
-    width:42px;height:42px;
-    border-radius:50%;
-    background:var(--amber);
-    border:none;
-    display:flex;align-items:center;justify-content:center;
-    cursor:pointer;
-    font-size:18px;
-    flex-shrink:0;
+    width:42px;height:42px; border-radius:50%; background:var(--amber); border:none;
+    display:flex;align-items:center;justify-content:center; cursor:pointer; font-size:18px; flex-shrink:0;
   }
-  .signs-row{
-    display:flex;
-    flex-wrap:wrap;
-    gap:8px;
-    margin-top:14px;
-  }
-  .chip{
-    font-size:11.5px;
-    font-weight:600;
-    padding:6px 12px;
-    border-radius:20px;
-    background:#f2ede1;
-    color:#5c5c60;
-  }
+
+  .signs-row{ display:flex; flex-wrap:wrap; gap:8px; margin-top:14px; }
+  .chip{ font-size:11.5px; font-weight:600; padding:6px 12px; border-radius:20px; background:#f2ede1; color:#5c5c60; }
+
+  .btn-row{ display:flex; gap:8px; margin-top:16px; }
   .start-btn{
-    width:100%;
-    margin-top:16px;
-    padding:13px;
-    border-radius:12px;
-    border:none;
-    background:var(--ink);
-    color:#fff;
-    font-size:14px;
-    font-weight:700;
-    cursor:pointer;
+    flex:1; padding:13px; border-radius:12px; border:none; background:var(--ink);
+    color:#fff; font-size:14px; font-weight:700; cursor:pointer;
   }
-  .start-btn:disabled{opacity:0.5;cursor:default;}
-  .footer-tags{
-    display:flex;
-    gap:14px;
-    justify-content:center;
-    margin-top:18px;
-    font-size:11px;
-    color:#9a9a9e;
-    font-weight:600;
+  .start-btn:disabled{ opacity:0.5; cursor:default; }
+  .stop-btn{
+    flex:1; padding:13px; border-radius:12px; border:none; background:#EDE7DA;
+    color:var(--ink); font-size:14px; font-weight:700; cursor:pointer; display:none;
   }
-  .footer-tags span{display:flex;align-items:center;gap:5px;}
-  .footer-tags .fdot{width:6px;height:6px;border-radius:50%;background:var(--amber);}
-  .status-line{
-    text-align:center;
-    font-size:11.5px;
-    color:#9a9a9e;
-    margin-top:10px;
-    min-height:14px;
+  .stop-btn.visible{ display:block; }
+
+  .status-line{ text-align:center; font-size:11.5px; color:#9a9a9e; margin-top:10px; min-height:14px; }
+  .footer-tags{ display:flex; gap:14px; justify-content:center; margin-top:18px; font-size:11px; color:#9a9a9e; font-weight:600; flex-wrap:wrap; }
+  .footer-tags span{ display:flex; align-items:center; gap:5px; }
+  .footer-tags .fdot{ width:6px; height:6px; border-radius:50%; background:var(--amber); }
+
+  /* ---- Responsive desktop layout ---- */
+  @media (min-width: 860px){
+    .app{ max-width: 900px; }
+    .phone{
+      display:grid;
+      grid-template-columns: 340px 1fr;
+      gap:32px;
+      padding:32px;
+      border-radius:24px;
+      align-items:start;
+    }
+    .topbar{ grid-column: 1 / -1; }
+    .intro-col{ display:flex; flex-direction:column; gap:14px; }
+    .intro-col .screen-title{ font-size:24px; }
+    .intro-col .screen-sub{ font-size:14px; }
+    .cam-col{ display:flex; flex-direction:column; }
+    .cam-wrap{ aspect-ratio:4/3; max-width:520px; }
   }
 </style>
 </head>
 <body>
 <div class="app">
+  <button class="backlink" onclick="location.href='../index.html'">← Back to Home</button>
   <div class="eyebrow"><span class="dot"></span><span class="dot amber"></span>TEAM CATALYST · LIVE PROTOTYPE</div>
   <h1>SignSetu — Sign to Speech</h1>
   <p class="tagline">"Every gesture has a voice"</p>
 
   <div class="phone">
-    <div class="topbar">
-      <div class="brand"><span class="sq"></span>signsetu</div>
-    </div>
-    <h2 class="screen-title">Hand Movement Recognition</h2>
-    <p class="screen-sub">Hold your hand steady in the frame</p>
+    <div class="topbar"><div class="brand"><span class="sq"></span>signsetu</div></div>
 
-    <div class="cam-wrap">
-      <div class="badge"><span class="ping"></span>TRACKING</div>
-      <video id="video" playsinline></video>
-      <canvas id="canvas"></canvas>
-    </div>
-
-    <div class="result-box">
+    <div class="intro-col">
       <div>
-        <div class="result-label">Interpreted Sign</div>
-        <div class="result-word" id="resultWord">—</div>
+        <h2 class="screen-title">Hand Movement Recognition</h2>
+        <p class="screen-sub">Hold your hand steady in the frame</p>
       </div>
-      <button class="speak-btn" id="speakBtn" title="Speak again">🔊</button>
+
+      <div class="signs-row">
+        <span class="chip">Hello</span>
+        <span class="chip">Help</span>
+        <span class="chip">Thank You</span>
+        <span class="chip">I Love You</span>
+      </div>
+
+      <div class="btn-row">
+        <button class="start-btn" id="startBtn">Start Camera</button>
+        <button class="stop-btn" id="stopBtn">Stop Camera</button>
+      </div>
+      <div class="status-line" id="statusLine">Camera off</div>
     </div>
 
-    <div class="signs-row">
-      <span class="chip">Hello</span>
-      <span class="chip">Help</span>
-      <span class="chip">Thank You</span>
-      <span class="chip">I Love You</span>
-    </div>
+    <div class="cam-col">
+      <div class="cam-wrap">
+        <div class="badge"><span class="ping"></span>TRACKING</div>
+        <video id="video" playsinline></video>
+        <canvas id="canvas"></canvas>
+        <div class="cam-off-overlay" id="camOffOverlay">Camera is off.<br/>Click "Start Camera" to begin.</div>
+      </div>
 
-    <button class="start-btn" id="startBtn">Start Camera</button>
-    <div class="status-line" id="statusLine">Camera off</div>
+      <div class="result-box">
+        <div>
+          <div class="result-label">Interpreted Sign</div>
+          <div class="result-word" id="resultWord">—</div>
+        </div>
+        <button class="speak-btn" id="speakBtn" title="Speak again">🔊</button>
+      </div>
+    </div>
   </div>
 
   <div class="footer-tags">
@@ -258,24 +184,21 @@ const ctx = canvasEl.getContext('2d');
 const resultWord = document.getElementById('resultWord');
 const speakBtn = document.getElementById('speakBtn');
 const startBtn = document.getElementById('startBtn');
+const stopBtn = document.getElementById('stopBtn');
 const statusLine = document.getElementById('statusLine');
+const camOffOverlay = document.getElementById('camOffOverlay');
 
 let lastSpokenWord = "";
 let lastSpokenTime = 0;
 let currentWord = "—";
 let camera = null;
-
-// ---- Gesture classification logic ----
-// Landmarks indices (MediaPipe Hands):
-// Tip ids: thumb 4, index 8, middle 12, ring 16, pinky 20
-// PIP/lower joints used to check "extended" vs "folded"
+let cameraRunning = false;
 
 function dist(a, b) {
   return Math.hypot(a.x - b.x, a.y - b.y, a.z - b.z);
 }
 
 function fingerExtended(lm, tipIdx, pipIdx, mcpIdx) {
-  // A finger is "extended" if the tip is farther from the wrist (0) than the pip joint
   const wrist = lm[0];
   return dist(lm[tipIdx], wrist) > dist(lm[pipIdx], wrist) * 1.05;
 }
@@ -290,28 +213,22 @@ function classifyGesture(lm) {
   const pinkyExt = fingerExtended(lm, 20, 18, 17);
 
   // Thumb: measure how far the tip has swept away from the base of the pinky.
-  // Tucked into a fist -> tip stays close to pinky base. Splayed out -> tip moves far away.
   const thumbExt = dist(thumbTip, pinkyMcp) > dist(thumbMcp, pinkyMcp) * 1.35;
 
   const extendedCount = [thumbExt, indexExt, middleExt, ringExt, pinkyExt].filter(Boolean).length;
 
-  // Open palm -> Hello
   if (indexExt && middleExt && ringExt && pinkyExt && extendedCount >= 4) {
     return "Hello";
   }
-  // Closed fist (thumb tucked in too) -> Help
   if (!thumbExt && !indexExt && !middleExt && !ringExt && !pinkyExt) {
     return "Help";
   }
-  // Index + pinky extended, middle+ring folded (rock sign) -> I Love You (approx ILY handshape uses thumb+index+pinky)
   if (indexExt && pinkyExt && !middleExt && !ringExt) {
     return "I Love You";
   }
-  // Index + middle extended (peace-ish / two fingers) -> Thank You (placeholder mapping)
   if (indexExt && middleExt && !ringExt && !pinkyExt) {
     return "Thank You";
   }
-
   return null;
 }
 
@@ -335,8 +252,6 @@ function onResults(results) {
 
   if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
     const lm = results.multiHandLandmarks[0];
-
-    // draw connections + points in orange, matching prototype
     if (window.HAND_CONNECTIONS) {
       drawConnectors(ctx, lm, HAND_CONNECTIONS, { color: '#F5A623', lineWidth: 3 });
     }
@@ -368,7 +283,7 @@ hands.setOptions({
 });
 hands.onResults(onResults);
 
-startBtn.addEventListener('click', async () => {
+async function startCamera() {
   startBtn.disabled = true;
   statusLine.textContent = "Requesting camera access…";
   try {
@@ -378,12 +293,46 @@ startBtn.addEventListener('click', async () => {
       height: 480
     });
     await camera.start();
+    cameraRunning = true;
+    camOffOverlay.style.display = 'none';
     statusLine.textContent = "Camera live — show a hand sign";
     startBtn.textContent = "Camera Running";
+    stopBtn.classList.add('visible');
   } catch (err) {
     statusLine.textContent = "Camera access failed: " + err.message;
     startBtn.disabled = false;
   }
+}
+
+function stopCamera() {
+  if (camera) {
+    camera.stop(); // stops the MediaPipe camera_utils loop
+  }
+  // Explicitly stop every hardware track so the browser releases the webcam
+  // (the camera indicator light should turn off after this).
+  const stream = videoEl.srcObject;
+  if (stream) {
+    stream.getTracks().forEach(track => track.stop());
+  }
+  videoEl.srcObject = null;
+  ctx.clearRect(0, 0, canvasEl.width, canvasEl.height);
+
+  cameraRunning = false;
+  camOffOverlay.style.display = 'flex';
+  startBtn.disabled = false;
+  startBtn.textContent = "Start Camera";
+  stopBtn.classList.remove('visible');
+  statusLine.textContent = "Camera stopped";
+  resultWord.textContent = "—";
+  currentWord = "—";
+}
+
+startBtn.addEventListener('click', startCamera);
+stopBtn.addEventListener('click', stopCamera);
+
+// Release the camera automatically if the user navigates away or closes the tab
+window.addEventListener('beforeunload', () => {
+  if (cameraRunning) stopCamera();
 });
 </script>
 </body>
