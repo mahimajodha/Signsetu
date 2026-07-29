@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SignSetu — Sign to Speech</title>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+<style>
+  :root{
+    --cream:#FBF5EA;
+    --ink:#17171A;
+    --amber:#F5A623;
+    --amber-deep:#E0921A;
+    --panel:#FFFFFF;
+    --line:rgba(23,23,26,0.08);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Segoe UI', system-ui, -apple-system, sans-serif;
+    background:var(--cream);
+    color:var(--ink);
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:32px 16px;
+  }
+  .app{
+    width:100%;
+    max-width:420px;
+  }
+  .eyebrow{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--amber-deep);
+    margin-bottom:6px;
+  }
+  .eyebrow .dot{width:9px;height:9px;border-radius:3px;background:var(--ink);display:inline-block;}
+  .eyebrow .dot.amber{background:var(--amber);}
+  h1{
+    font-size:26px;
+    margin:0 0 4px 0;
+    letter-spacing:-0.01em;
+  }
+  .tagline{
+    font-style:italic;
+    color:#6b6b6f;
+    margin:0 0 20px 0;
+    font-size:14px;
+  }
+  .phone{
+    background:var(--panel);
+    border-radius:28px;
+    padding:20px;
+    box-shadow:0 20px 60px rgba(23,23,26,0.12), 0 2px 8px rgba(23,23,26,0.06);
+    border:1px solid var(--line);
+  }
+  .topbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:14px;
+  }
+  .brand{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-weight:800;
+    font-size:16px;
+  }
+  .brand .sq{
+    width:16px;height:16px;border-radius:4px;background:var(--amber);
+  }
+  h2.screen-title{
+    font-size:19px;
+    margin:0 0 2px 0;
+  }
+  .screen-sub{
+    font-size:12.5px;
+    color:#8a8a8e;
+    margin:0 0 12px 0;
+  }
+  .cam-wrap{
+    position:relative;
+    background:var(--ink);
+    border-radius:16px;
+    overflow:hidden;
+    aspect-ratio:1/1;
+  }
+  video{
+    position:absolute; inset:0;
+    width:100%; height:100%;
+    object-fit:cover;
+    transform:scaleX(-1);
+  }
+  canvas{
+    position:absolute; inset:0;
+    width:100%; height:100%;
+    transform:scaleX(-1);
+  }
+  .badge{
+    position:absolute;
+    top:10px; left:10px;
+    z-index:5;
+    background:rgba(23,23,26,0.75);
+    color:#fff;
+    font-size:10.5px;
+    font-weight:700;
+    letter-spacing:0.06em;
+    padding:5px 9px;
+    border-radius:20px;
+    display:flex;
+    align-items:center;
+    gap:5px;
+  }
+  .badge .ping{
+    width:6px;height:6px;border-radius:50%;background:var(--amber);
+    animation:pulse 1.4s infinite;
+  }
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
+  .result-box{
+    margin-top:12px;
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:14px 16px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+  }
+  .result-label{
+    font-size:10.5px;
+    font-weight:700;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:#9a9a9e;
+    margin-bottom:3px;
+  }
+  .result-word{
+    font-size:24px;
+    font-weight:800;
+  }
+  .speak-btn{
+    width:42px;height:42px;
+    border-radius:50%;
+    background:var(--amber);
+    border:none;
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;
+    font-size:18px;
+    flex-shrink:0;
+  }
+  .signs-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-top:14px;
+  }
+  .chip{
+    font-size:11.5px;
+    font-weight:600;
+    padding:6px 12px;
+    border-radius:20px;
+    background:#f2ede1;
+    color:#5c5c60;
+  }
+  .start-btn{
+    width:100%;
+    margin-top:16px;
+    padding:13px;
+    border-radius:12px;
+    border:none;
+    background:var(--ink);
+    color:#fff;
+    font-size:14px;
+    font-weight:700;
+    cursor:pointer;
+  }
+  .start-btn:disabled{opacity:0.5;cursor:default;}
+  .footer-tags{
+    display:flex;
+    gap:14px;
+    justify-content:center;
+    margin-top:18px;
+    font-size:11px;
+    color:#9a9a9e;
+    font-weight:600;
+  }
+  .footer-tags span{display:flex;align-items:center;gap:5px;}
+  .footer-tags .fdot{width:6px;height:6px;border-radius:50%;background:var(--amber);}
+  .status-line{
+    text-align:center;
+    font-size:11.5px;
+    color:#9a9a9e;
+    margin-top:10px;
+    min-height:14px;
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="eyebrow"><span class="dot"></span><span class="dot amber"></span>TEAM CATALYST · LIVE PROTOTYPE</div>
+  <h1>SignSetu — Sign to Speech</h1>
+  <p class="tagline">"Every gesture has a voice"</p>
+
+  <div class="phone">
+    <div class="topbar">
+      <div class="brand"><span class="sq"></span>signsetu</div>
+    </div>
+    <h2 class="screen-title">Hand Movement Recognition</h2>
+    <p class="screen-sub">Hold your hand steady in the frame</p>
+
+    <div class="cam-wrap">
+      <div class="badge"><span class="ping"></span>TRACKING</div>
+      <video id="video" playsinline></video>
+      <canvas id="canvas"></canvas>
+    </div>
+
+    <div class="result-box">
+      <div>
+        <div class="result-label">Interpreted Sign</div>
+        <div class="result-word" id="resultWord">—</div>
+      </div>
+      <button class="speak-btn" id="speakBtn" title="Speak again">🔊</button>
+    </div>
+
+    <div class="signs-row">
+      <span class="chip">Hello</span>
+      <span class="chip">Help</span>
+      <span class="chip">Thank You</span>
+      <span class="chip">I Love You</span>
+    </div>
+
+    <button class="start-btn" id="startBtn">Start Camera</button>
+    <div class="status-line" id="statusLine">Camera off</div>
+  </div>
+
+  <div class="footer-tags">
+    <span><span class="fdot"></span>Google MediaPipe</span>
+    <span><span class="fdot"></span>Rule-Based Classifier</span>
+    <span><span class="fdot"></span>Web Speech TTS</span>
+  </div>
+</div>
+
+<script>
+const videoEl = document.getElementById('video');
+const canvasEl = document.getElementById('canvas');
+const ctx = canvasEl.getContext('2d');
+const resultWord = document.getElementById('resultWord');
+const speakBtn = document.getElementById('speakBtn');
+const startBtn = document.getElementById('startBtn');
+const statusLine = document.getElementById('statusLine');
+
+let lastSpokenWord = "";
+let lastSpokenTime = 0;
+let currentWord = "—";
+let camera = null;
+
+// ---- Gesture classification logic ----
+// Landmarks indices (MediaPipe Hands):
+// Tip ids: thumb 4, index 8, middle 12, ring 16, pinky 20
+// PIP/lower joints used to check "extended" vs "folded"
+
+function dist(a, b) {
+  return Math.hypot(a.x - b.x, a.y - b.y, a.z - b.z);
+}
+
+function fingerExtended(lm, tipIdx, pipIdx, mcpIdx) {
+  // A finger is "extended" if the tip is farther from the wrist (0) than the pip joint
+  const wrist = lm[0];
+  return dist(lm[tipIdx], wrist) > dist(lm[pipIdx], wrist) * 1.05;
+}
+
+function classifyGesture(lm) {
+  const thumbTip = lm[4], thumbMcp = lm[2];
+  const pinkyMcp = lm[17];
+
+  const indexExt = fingerExtended(lm, 8, 6, 5);
+  const middleExt = fingerExtended(lm, 12, 10, 9);
+  const ringExt = fingerExtended(lm, 16, 14, 13);
+  const pinkyExt = fingerExtended(lm, 20, 18, 17);
+
+  // Thumb: measure how far the tip has swept away from the base of the pinky.
+  // Tucked into a fist -> tip stays close to pinky base. Splayed out -> tip moves far away.
+  const thumbExt = dist(thumbTip, pinkyMcp) > dist(thumbMcp, pinkyMcp) * 1.35;
+
+  const extendedCount = [thumbExt, indexExt, middleExt, ringExt, pinkyExt].filter(Boolean).length;
+
+  // Open palm -> Hello
+  if (indexExt && middleExt && ringExt && pinkyExt && extendedCount >= 4) {
+    return "Hello";
+  }
+  // Closed fist (thumb tucked in too) -> Help
+  if (!thumbExt && !indexExt && !middleExt && !ringExt && !pinkyExt) {
+    return "Help";
+  }
+  // Index + pinky extended, middle+ring folded (rock sign) -> I Love You (approx ILY handshape uses thumb+index+pinky)
+  if (indexExt && pinkyExt && !middleExt && !ringExt) {
+    return "I Love You";
+  }
+  // Index + middle extended (peace-ish / two fingers) -> Thank You (placeholder mapping)
+  if (indexExt && middleExt && !ringExt && !pinkyExt) {
+    return "Thank You";
+  }
+
+  return null;
+}
+
+function speak(text) {
+  if (!('speechSynthesis' in window)) return;
+  window.speechSynthesis.cancel();
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.rate = 0.95;
+  window.speechSynthesis.speak(utter);
+}
+
+speakBtn.addEventListener('click', () => {
+  if (currentWord && currentWord !== "—") speak(currentWord);
+});
+
+function onResults(results) {
+  canvasEl.width = videoEl.videoWidth || 480;
+  canvasEl.height = videoEl.videoHeight || 480;
+  ctx.save();
+  ctx.clearRect(0, 0, canvasEl.width, canvasEl.height);
+
+  if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
+    const lm = results.multiHandLandmarks[0];
+
+    // draw connections + points in orange, matching prototype
+    if (window.HAND_CONNECTIONS) {
+      drawConnectors(ctx, lm, HAND_CONNECTIONS, { color: '#F5A623', lineWidth: 3 });
+    }
+    drawLandmarks(ctx, lm, { color: '#17171A', fillColor: '#F5A623', radius: 4 });
+
+    const gesture = classifyGesture(lm);
+    if (gesture) {
+      currentWord = gesture;
+      resultWord.textContent = gesture;
+      const now = Date.now();
+      if (gesture !== lastSpokenWord || now - lastSpokenTime > 2200) {
+        speak(gesture);
+        lastSpokenWord = gesture;
+        lastSpokenTime = now;
+      }
+    }
+  }
+  ctx.restore();
+}
+
+const hands = new Hands({
+  locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`
+});
+hands.setOptions({
+  maxNumHands: 1,
+  modelComplexity: 1,
+  minDetectionConfidence: 0.6,
+  minTrackingConfidence: 0.6
+});
+hands.onResults(onResults);
+
+startBtn.addEventListener('click', async () => {
+  startBtn.disabled = true;
+  statusLine.textContent = "Requesting camera access…";
+  try {
+    camera = new Camera(videoEl, {
+      onFrame: async () => { await hands.send({ image: videoEl }); },
+      width: 480,
+      height: 480
+    });
+    await camera.start();
+    statusLine.textContent = "Camera live — show a hand sign";
+    startBtn.textContent = "Camera Running";
+  } catch (err) {
+    statusLine.textContent = "Camera access failed: " + err.message;
+    startBtn.disabled = false;
+  }
+});
+</script>
+</body>
+</html>
