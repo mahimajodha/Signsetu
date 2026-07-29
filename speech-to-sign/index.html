@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SignSetu — Speech to Sign</title>
+<style>
+  :root{
+    --cream:#FBF5EA;
+    --ink:#17171A;
+    --amber:#F5A623;
+    --amber-deep:#E0921A;
+    --panel:#FFFFFF;
+    --line:rgba(23,23,26,0.08);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Segoe UI', system-ui, -apple-system, sans-serif;
+    background:var(--cream);
+    color:var(--ink);
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:32px 16px;
+  }
+  .app{ width:100%; max-width:420px; }
+  .eyebrow{
+    display:flex; align-items:center; gap:8px;
+    font-size:11px; font-weight:700; letter-spacing:0.14em;
+    text-transform:uppercase; color:var(--amber-deep); margin-bottom:6px;
+  }
+  .eyebrow .dot{width:9px;height:9px;border-radius:3px;background:var(--ink);display:inline-block;}
+  .eyebrow .dot.amber{background:var(--amber);}
+  h1{ font-size:26px; margin:0 0 4px 0; letter-spacing:-0.01em; }
+  .tagline{ font-style:italic; color:#6b6b6f; margin:0 0 20px 0; font-size:14px; }
+  .phone{
+    background:var(--panel); border-radius:28px; padding:20px;
+    box-shadow:0 20px 60px rgba(23,23,26,0.12), 0 2px 8px rgba(23,23,26,0.06);
+    border:1px solid var(--line);
+  }
+  .topbar{ display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
+  .brand{ display:flex; align-items:center; gap:8px; font-weight:800; font-size:16px; }
+  .brand .sq{ width:16px;height:16px;border-radius:4px;background:var(--amber); }
+  h2.screen-title{ font-size:19px; margin:0 0 2px 0; }
+  .screen-sub{ font-size:12.5px; color:#8a8a8e; margin:0 0 12px 0; }
+
+  .listen-box{
+    background:var(--ink); border-radius:16px; padding:22px;
+    display:flex; flex-direction:column; align-items:center; gap:10px;
+  }
+  .mic-circle{
+    width:56px; height:56px; border-radius:50%;
+    background:var(--amber); display:flex; align-items:center; justify-content:center;
+    font-size:22px; cursor:pointer; border:none;
+    transition:transform 0.15s;
+  }
+  .mic-circle:active{ transform:scale(0.94); }
+  .mic-circle.live{ animation:pulseRing 1.2s infinite; }
+  @keyframes pulseRing{
+    0%{ box-shadow:0 0 0 0 rgba(245,166,35,0.6); }
+    70%{ box-shadow:0 0 0 14px rgba(245,166,35,0); }
+    100%{ box-shadow:0 0 0 0 rgba(245,166,35,0); }
+  }
+  .listen-label{ color:#fff; font-size:12px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; opacity:0.8; }
+
+  .avatar-wrap{
+    position:relative; margin-top:12px;
+    background:#F3EBDA; border-radius:16px; overflow:hidden;
+    aspect-ratio:1/1; display:flex; align-items:center; justify-content:center;
+  }
+  .badge{
+    position:absolute; top:10px; left:10px; z-index:5;
+    background:rgba(23,23,26,0.75); color:#fff; font-size:10.5px; font-weight:700;
+    letter-spacing:0.06em; padding:5px 9px; border-radius:20px;
+  }
+  .sign-label-badge{
+    position:absolute; bottom:10px; right:10px; z-index:5;
+    background:var(--amber); color:var(--ink); font-size:12px; font-weight:800;
+    padding:5px 12px; border-radius:20px;
+  }
+  svg#avatar{ width:78%; height:78%; overflow:visible; }
+
+  /* Arm pivot animations */
+  .arm-right{ transform-origin: 128px 92px; }
+  .arm-left{ transform-origin: 72px 92px; }
+
+  .pose-wave .arm-right{ animation: waveArm 0.55s ease-in-out infinite alternate; }
+  @keyframes waveArm{
+    from{ transform: rotate(-35deg); }
+    to{ transform: rotate(-65deg); }
+  }
+
+  .pose-fist .arm-right{ transform: rotate(-95deg); }
+  .pose-fist .fist-glow{ animation: fistPulse 0.9s ease-in-out infinite; }
+  @keyframes fistPulse{
+    0%,100%{ opacity:0.35; r:14; }
+    50%{ opacity:0.75; r:19; }
+  }
+
+  .pose-heart .arm-left{ transform: rotate(55deg); }
+  .pose-heart .arm-right{ transform: rotate(-55deg); }
+  .pose-heart .heart-icon{ animation: heartPop 0.6s ease-out forwards; transform-origin: 100px 78px; }
+  @keyframes heartPop{
+    0%{ opacity:0; transform: scale(0.3); }
+    60%{ opacity:1; transform: scale(1.15); }
+    100%{ opacity:1; transform: scale(1); }
+  }
+
+  .pose-thanks .arm-left{ transform: rotate(70deg); }
+  .pose-thanks .arm-right{ transform: rotate(-70deg); }
+  .pose-thanks .head-grp{ animation: nod 0.7s ease-in-out; transform-origin: 100px 60px; }
+  @keyframes nod{
+    0%,100%{ transform: rotate(0deg); }
+    50%{ transform: rotate(6deg); }
+  }
+
+  .pose-neutral .arm-right{ transform: rotate(-15deg); }
+  .pose-neutral .arm-left{ transform: rotate(15deg); }
+
+  .pose-point .arm-right{ transform: rotate(-88deg) translateX(6px); }
+
+  .result-box{
+    margin-top:12px; background:#fff; border:1px solid var(--line); border-radius:14px;
+    padding:14px 16px;
+  }
+  .result-label{ font-size:10.5px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:#9a9a9e; margin-bottom:5px; }
+  .result-text{ font-size:17px; font-weight:700; min-height:24px; }
+  .status-line{ text-align:center; font-size:11.5px; color:#9a9a9e; margin-top:10px; min-height:14px; }
+
+  .footer-tags{ display:flex; gap:14px; justify-content:center; margin-top:18px; font-size:11px; color:#9a9a9e; font-weight:600; flex-wrap:wrap; }
+  .footer-tags span{ display:flex; align-items:center; gap:5px; }
+  .footer-tags .fdot{ width:6px; height:6px; border-radius:50%; background:var(--amber); }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="eyebrow"><span class="dot"></span><span class="dot amber"></span>TEAM CATALYST · LIVE PROTOTYPE</div>
+  <h1>SignSetu — Speech to Sign</h1>
+  <p class="tagline">"Every gesture has a voice"</p>
+
+  <div class="phone">
+    <div class="topbar"><div class="brand"><span class="sq"></span>signsetu</div></div>
+    <h2 class="screen-title">Voice to Sign Avatar</h2>
+    <p class="screen-sub">Speak naturally, the avatar signs it back</p>
+
+    <div class="listen-box">
+      <button class="mic-circle" id="micBtn" title="Tap to speak">🎙️</button>
+      <div class="listen-label" id="listenLabel">Tap to speak</div>
+    </div>
+
+    <div class="avatar-wrap">
+      <div class="badge">SVG AVATAR · DEMO</div>
+      <div class="sign-label-badge" id="signBadge">—</div>
+      <svg id="avatar" viewBox="0 0 200 210" xmlns="http://www.w3.org/2000/svg" class="pose-neutral">
+        <!-- legs -->
+        <rect x="82" y="150" width="14" height="50" rx="7" fill="#2B2B30"/>
+        <rect x="104" y="150" width="14" height="50" rx="7" fill="#2B2B30"/>
+        <ellipse cx="89" cy="203" rx="12" ry="6" fill="#17171A"/>
+        <ellipse cx="111" cy="203" rx="12" ry="6" fill="#17171A"/>
+
+        <!-- torso -->
+        <rect x="68" y="88" width="64" height="70" rx="26" fill="#F5A623"/>
+        <rect x="90" y="88" width="20" height="16" rx="6" fill="#E0921A"/>
+
+        <!-- left arm -->
+        <g class="arm-left">
+          <rect x="66" y="92" width="14" height="55" rx="7" fill="#F5A623"/>
+          <circle cx="72" cy="150" r="10" fill="#F0C39E"/>
+        </g>
+
+        <!-- right arm -->
+        <g class="arm-right">
+          <rect x="120" y="92" width="14" height="55" rx="7" fill="#F5A623"/>
+          <circle cx="128" cy="150" r="10" fill="#F0C39E"/>
+          <circle class="fist-glow" cx="128" cy="150" r="14" fill="#F5A623" opacity="0"/>
+        </g>
+
+        <!-- head -->
+        <g class="head-grp">
+          <circle cx="100" cy="55" r="30" fill="#F0C39E"/>
+          <path d="M70 48 Q100 15 130 48 Q130 30 100 26 Q70 30 70 48 Z" fill="#3A2B22"/>
+          <circle cx="90" cy="56" r="3.4" fill="#17171A"/>
+          <circle cx="110" cy="56" r="3.4" fill="#17171A"/>
+          <path d="M90 68 Q100 76 110 68" stroke="#17171A" stroke-width="3" fill="none" stroke-linecap="round"/>
+        </g>
+
+        <!-- heart icon (shown only for love pose) -->
+        <path class="heart-icon" d="M100 82 C90 68, 65 75, 70 95 C74 112, 100 128, 100 128 C100 128, 126 112, 130 95 C135 75, 110 68, 100 82 Z"
+              fill="#E0392B" opacity="0"/>
+      </svg>
+    </div>
+
+    <div class="result-box">
+      <div class="result-label">Signing Now</div>
+      <div class="result-text" id="heardText">"—"</div>
+    </div>
+    <div class="status-line" id="statusLine">Click the mic and say something like "hello" or "I need help"</div>
+  </div>
+
+  <div class="footer-tags">
+    <span><span class="fdot"></span>Web Speech API</span>
+    <span><span class="fdot"></span>Root-Word NLP</span>
+    <span><span class="fdot"></span>SVG Avatar</span>
+  </div>
+</div>
+
+<script>
+const micBtn = document.getElementById('micBtn');
+const listenLabel = document.getElementById('listenLabel');
+const heardText = document.getElementById('heardText');
+const statusLine = document.getElementById('statusLine');
+const signBadge = document.getElementById('signBadge');
+const avatarSvg = document.getElementById('avatar');
+
+function setPose(name) {
+  avatarSvg.className.baseVal = 'pose-' + name;
+}
+setPose('neutral');
+
+// ---- Word -> sign mapping (root words after simple NLP stripping) ----
+const STOPWORDS = new Set(['a','an','the','is','am','are','to','please','can','you','i','me','my','it','of','for','on','in','at','and']);
+
+const SIGN_MAP = {
+  'hello': { pose: 'wave', label: 'HELLO' },
+  'hi': { pose: 'wave', label: 'HELLO' },
+  'help': { pose: 'fist', label: 'HELP' },
+  'thanks': { pose: 'thanks', label: 'THANK YOU' },
+  'thank': { pose: 'thanks', label: 'THANK YOU' },
+  'love': { pose: 'heart', label: 'LOVE' },
+  'need': { pose: 'point', label: 'NEED' },
+  'water': { pose: 'point', label: 'WATER' },
+  'food': { pose: 'point', label: 'FOOD' },
+  'hungry': { pose: 'point', label: 'HUNGRY' }
+};
+
+function rootWords(sentence) {
+  return sentence
+    .toLowerCase()
+    .replace(/[^a-z\s]/g, '')
+    .split(/\s+/)
+    .filter(w => w && !STOPWORDS.has(w));
+}
+
+async function signSequence(words) {
+  const matched = words.filter(w => SIGN_MAP[w]);
+  if (matched.length === 0) {
+    statusLine.textContent = "No known sign found for that phrase yet — try 'hello', 'help', 'thank you', or 'I need water'";
+    setPose('neutral');
+    signBadge.textContent = '—';
+    return;
+  }
+  for (const w of matched) {
+    const { pose, label } = SIGN_MAP[w];
+    setPose(pose);
+    signBadge.textContent = label;
+    statusLine.textContent = `Signing: ${label}`;
+    await new Promise(r => setTimeout(r, 1100));
+  }
+  setPose('neutral');
+  signBadge.textContent = '—';
+  statusLine.textContent = "Done. Click the mic to try another phrase.";
+}
+
+// ---- Web Speech API ----
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+let recognition = null;
+let listening = false;
+
+if (SpeechRecognition) {
+  recognition = new SpeechRecognition();
+  recognition.lang = 'en-US';
+  recognition.continuous = false;
+  recognition.interimResults = false;
+
+  recognition.onstart = () => {
+    listening = true;
+    micBtn.classList.add('live');
+    listenLabel.textContent = "Listening…";
+    statusLine.textContent = "Speak now";
+  };
+
+  recognition.onresult = (event) => {
+    const transcript = event.results[0][0].transcript;
+    heardText.textContent = `"${transcript}"`;
+    const words = rootWords(transcript);
+    signSequence(words);
+  };
+
+  recognition.onerror = (event) => {
+    statusLine.textContent = "Mic error: " + event.error;
+  };
+
+  recognition.onend = () => {
+    listening = false;
+    micBtn.classList.remove('live');
+    listenLabel.textContent = "Tap to speak";
+  };
+} else {
+  statusLine.textContent = "Speech recognition isn't supported in this browser — try Chrome.";
+  micBtn.disabled = true;
+}
+
+micBtn.addEventListener('click', () => {
+  if (!recognition || listening) return;
+  recognition.start();
+});
+</script>
+</body>
+</html>
